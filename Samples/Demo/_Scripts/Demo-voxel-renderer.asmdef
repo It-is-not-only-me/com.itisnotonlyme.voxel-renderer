@@ -1,0 +1,17 @@
+{
+    "name": "Demo-voxel-renderer",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e1e5f88f53b4bf24a96bc00f2bad8707",
+        "GUID:1ce5d872e3143e14cad6fe7a65c83b68"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
