@@ -19,14 +19,18 @@ Shader "Unlit/RayMarchingShader"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float2 uv : TEXCOORD0;
             };
 
             struct v2f
             {
-                float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
+                float3 direccion_camara : TEXCOORD0;
+            };
+
+            struct Interseccion {
+                float3 color;
+                float distancia;
+                int cantidadPasos;
             };
 
             sampler2D _MainTex;
@@ -36,17 +40,31 @@ Shader "Unlit/RayMarchingShader"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                o.direccion_camara = -WorldSpaceViewDir(v.vertex);
                 return o;
             }
 
-            float4 frag (v2f i) : SV_Target
+            Interseccion colorEnCamino(float3 puntoDeInicio, float3 Direccion) 
             {
-                
-                clip(i.uv * 2 - 1);
-                
-                return float4(i.uv, 0, 1);
+                Interseccion interseccion;
+
+                interseccion.color = float3(1, 1, 1);
+                interseccion.distancia = 1;
+                interseccion.cantidadPasos = 0;
+
+                return interseccion;
+            }
+
+            float4 frag(v2f i) : SV_Target
+            {
+                float3 direccion = normalize(i.direccion_camara);
+
+                Interseccion interseccion = colorEnCamino(i.vertex, direccion);
+
+                clip(interseccion.distancia);
+
+                return float4(direccion, 1);
+                //return float4(interseccion.color, 1);
             }
             ENDCG
         }

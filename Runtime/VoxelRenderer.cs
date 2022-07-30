@@ -36,7 +36,6 @@ namespace ItIsNotOnlyMe.VoxelRenderer
             
             Vector3[] vertices = new Vector3[8];
             List<int> indices = new List<int>();
-            Vector2[] uvs = new Vector2[8];
 
             Bounds limites = _generarDatos.Limites;
 
@@ -52,7 +51,6 @@ namespace ItIsNotOnlyMe.VoxelRenderer
                         );
 
                         vertices[contador] = limites.center + posicionRelativa;
-                        uvs[contador] = (new Vector2(i, j) + Vector2.one) / 2;
                     }
 
             AgregarIndices(4, 5, 7, 6, indices);
@@ -64,7 +62,6 @@ namespace ItIsNotOnlyMe.VoxelRenderer
             
             mesh.SetVertices(vertices);
             mesh.SetIndices(indices, MeshTopology.Triangles, 0);
-            mesh.SetUVs(0, uvs);
 
             mesh.RecalculateNormals();
             mesh.bounds = limites;
