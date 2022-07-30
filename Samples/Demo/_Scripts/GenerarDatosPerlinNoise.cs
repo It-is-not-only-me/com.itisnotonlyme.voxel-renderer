@@ -4,13 +4,13 @@ namespace ItIsNotOnlyMe.VoxelRenderer
 {
     public class GenerarDatosPerlinNoise : GenerarDatos
     {
-        [SerializeField] private Bounds _limites;
+        [SerializeField] private Vector3 _tamanio;
 
-        public override Bounds Limites => _limites;
+        public override Bounds Limites { get => new Bounds(transform.position, _tamanio); }
 
         private void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(_limites.center, _limites.size);
+            Gizmos.DrawWireCube(Limites.center, Limites.size);
         }
     }
 }

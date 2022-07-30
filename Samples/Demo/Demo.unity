@@ -205,9 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2249af7c51eb34e9df0bff2bb9fd47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _limites:
-    m_Center: {x: 1, y: 1, z: 1}
-    m_Extent: {x: 1, y: 1, z: 1}
+  _tamanio: {x: 1, y: 1, z: 1}
 --- !u!114 &814875100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,9 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2249af7c51eb34e9df0bff2bb9fd47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _limites:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 1, y: 1, z: 1}
+  _tamanio: {x: 1, y: 1, z: 1}
 --- !u!23 &1706733757
 MeshRenderer:
   m_ObjectHideFlags: 0
