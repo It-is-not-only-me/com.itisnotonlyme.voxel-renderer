@@ -2,7 +2,7 @@
 
 namespace ItIsNotOnlyMe.VoxelRenderer
 {
-    public abstract class GenerarDatosBehaviour : MonoBehaviour, IGenerarDatos
+    public abstract class GenerarDatos : MonoBehaviour, IGenerarDatos
     {
         public abstract Bounds Limites { get; }
     }

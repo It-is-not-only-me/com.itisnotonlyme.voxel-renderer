@@ -2,7 +2,7 @@
 
 namespace ItIsNotOnlyMe.VoxelRenderer
 {
-    public class GenerarDatosPerlinNoise : GenerarDatosBehaviour
+    public class GenerarDatosPerlinNoise : GenerarDatos
     {
         [SerializeField] private Bounds _limites;
 
