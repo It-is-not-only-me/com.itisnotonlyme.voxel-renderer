@@ -1,10 +1,8 @@
 {
-    "name": "com.itisnotonlyme.nombre.Tests",
+    "name": "com.itisnotonlyme.voxel-renderer",
     "rootNamespace": "",
     "references": [
-        "GUID:0acc523941302664db1f4e527237feb3",
-        "GUID:27619889b8ba8c24980f49ee34dbb44a",
-        "GUID:1ce5d872e3143e14cad6fe7a65c83b68"
+        "GUID:e1e5f88f53b4bf24a96bc00f2bad8707"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

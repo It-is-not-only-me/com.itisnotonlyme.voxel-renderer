@@ -1,2 +1,3 @@
-# Unity-Packages
-Este repositorio va a tener todos los packages que vaya creando para crear mis juegos
+# Voxel renderer
+
+Este renderer tiene la intencion de ser eficiente y suficientemente optimizado para poder utilizarse en computadoras de bajo rendimiento.
