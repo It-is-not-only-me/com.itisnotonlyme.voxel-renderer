@@ -41,18 +41,7 @@ namespace ItIsNotOnlyMe.VoxelRenderer
 
             int cantidadDeDatos = datosPorEje.x * datosPorEje.y * datosPorEje.z;
             _datosBuffer = new ComputeBuffer(cantidadDeDatos, _datosStride);
-
-            Dato[,,] datosDados = _generarDatos.Datos();
-            Dato[] datosFinales = new Dato[cantidadDeDatos];
-
-            for (int i = 0, contador = 0; i < datosPorEje.x; i++)
-                for (int j = 0; j < datosPorEje.y; j++)
-                    for (int k = 0; k < datosPorEje.z; k++, contador++)
-                    {
-                        datosFinales[contador] = datosDados[i, j, k];
-                    }
-
-            _datosBuffer.SetData(datosFinales);
+            _datosBuffer.SetData(_generarDatos.Datos());
 
             float[] tamanio = new float[3], posicion = new float[3];
             Bounds limites = _generarDatos.Limites;

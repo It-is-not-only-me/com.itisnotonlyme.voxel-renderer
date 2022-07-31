@@ -8,6 +8,6 @@ namespace ItIsNotOnlyMe.VoxelRenderer
 
         public Vector3Int DatosPorEje { get; }
 
-        public Dato[,,] Datos();
+        public Dato[] Datos();
     }
 }
