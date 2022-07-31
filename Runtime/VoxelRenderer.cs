@@ -14,6 +14,8 @@ namespace ItIsNotOnlyMe.VoxelRenderer
 
         private GenerarDatos _generarDatos;
 
+        private static int _datosStride = 3 * sizeof(float) + sizeof(int);
+
         private void Awake()
         {
             Material nuevoMaterial = new Material(_datosRender.GeometryShader());
@@ -28,6 +30,46 @@ namespace ItIsNotOnlyMe.VoxelRenderer
 
             MeshFilter meshFilter = GetComponent<MeshFilter>();
             meshFilter.sharedMesh = GenerarMesh();
+
+            Actualizar();
+        }
+
+        private void Actualizar()
+        {
+            Vector3Int datosPorEje = _generarDatos.DatosPorEje;
+
+            int cantidadDeDatos = datosPorEje.x * datosPorEje.y * datosPorEje.z;
+            ComputeBuffer datosBuffer = new ComputeBuffer(cantidadDeDatos, _datosStride);
+
+            Dato[,,] datosDados = _generarDatos.Datos();
+            Dato[] datosFinales = new Dato[cantidadDeDatos];
+
+            for (int i = 0, contador = 0; i < datosPorEje.x; i++)
+                for (int j = 0; j < datosPorEje.y; j++)
+                    for (int k = 0; k < datosPorEje.z; k++, contador++)
+                    {
+                        datosFinales[contador] = datosDados[i, j, k];
+                    }
+            datosBuffer.SetData(datosFinales);
+
+            float[] tamanio = new float[3];
+            float[] posicion = new float[3];
+
+            Bounds limites = _generarDatos.Limites;
+            for (int i = 0; i < 3; i++)
+            {
+                tamanio[i] = limites.size[i] * 2;
+                posicion[i] = limites.center[i];
+            }
+
+            _material.SetBuffer("datos", datosBuffer);
+            _material.SetInt("datosParaEjeX", datosPorEje.x);
+            _material.SetInt("datosParaEjeY", datosPorEje.y);
+            _material.SetInt("datosParaEjeZ", datosPorEje.z);
+            _material.SetFloatArray("tamanio", tamanio);
+            _material.SetFloatArray("posicion", posicion);
+
+            datosBuffer.Dispose();
         }
 
         private Mesh GenerarMesh()

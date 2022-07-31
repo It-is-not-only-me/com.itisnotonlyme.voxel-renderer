@@ -6,7 +6,10 @@ Shader "Unlit/RayMarchingShader"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags 
+        { 
+            "RenderType"="Opaque" 
+        }
 
         Pass
         {
@@ -27,11 +30,25 @@ Shader "Unlit/RayMarchingShader"
                 float3 direccion_camara : TEXCOORD0;
             };
 
-            struct Interseccion {
+            struct Interseccion 
+            {
                 float3 color;
                 float distancia;
                 int cantidadPasos;
             };
+
+            struct Dato 
+            {
+                float3 color;
+                bool transparente;
+            };
+
+            StructuredBuffer<Dato> datos;
+            int datosParaEjeX;
+            int datosParaEjeY;
+            int datosParaEjeZ;
+            float3 tamanio;
+            float3 posicion;
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -63,8 +80,7 @@ Shader "Unlit/RayMarchingShader"
 
                 clip(interseccion.distancia);
 
-                return float4(direccion, 1);
-                //return float4(interseccion.color, 1);
+                return float4(interseccion.color, 1);
             }
             ENDCG
         }
