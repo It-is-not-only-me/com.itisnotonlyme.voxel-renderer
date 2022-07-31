@@ -1,8 +1,11 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Unlit/RayMarchingShader"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _maxPasos ("MaxPasos", int) = 20
     }
     SubShader
     {
@@ -27,7 +30,8 @@ Shader "Unlit/RayMarchingShader"
             struct v2f
             {
                 float4 vertex : SV_POSITION;
-                float3 direccion_camara : TEXCOORD0;
+                float4 posicion_mundo : TEXCOORD0;
+                float3 direccion_camara : TEXCOORD1;
             };
 
             struct Interseccion 
@@ -40,15 +44,19 @@ Shader "Unlit/RayMarchingShader"
             struct Dato 
             {
                 float3 color;
-                bool transparente;
+                int transparente;
             };
 
-            StructuredBuffer<Dato> datos;
-            int datosParaEjeX;
-            int datosParaEjeY;
-            int datosParaEjeZ;
-            float3 tamanio;
-            float3 posicion;
+            StructuredBuffer<Dato> _datos;
+            
+            int _datosParaEjeX;
+            int _datosParaEjeY;
+            int _datosParaEjeZ;
+
+            float3 _tamanio;
+            float3 _posicion;
+
+            int _maxPasos;
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -57,6 +65,7 @@ Shader "Unlit/RayMarchingShader"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                o.posicion_mundo = mul(unity_ObjectToWorld, v.vertex);
                 o.direccion_camara = -WorldSpaceViewDir(v.vertex);
                 return o;
             }
@@ -65,20 +74,33 @@ Shader "Unlit/RayMarchingShader"
             {
                 Interseccion interseccion;
 
-                interseccion.color = float3(1, 1, 1);
+                puntoDeInicio -= _posicion - _tamanio / 2;
+
+                interseccion.color = _datos[0].color;
                 interseccion.distancia = 1;
-                interseccion.cantidadPasos = 0;
+                interseccion.cantidadPasos = 3;
 
                 return interseccion;
+            }
+
+            float InverseLerp(float desde, float hasta, float valor) {
+                return (valor - desde) / (hasta - desde);
+            }
+
+            float ReMap(float valorInicio, float valorFinal, float destInicio, float destFinal, float valor) {
+                float t = InverseLerp(valorInicio, valorFinal, valor);
+                return lerp(destInicio, destFinal, t);
             }
 
             float4 frag(v2f i) : SV_Target
             {
                 float3 direccion = normalize(i.direccion_camara);
 
-                Interseccion interseccion = colorEnCamino(i.vertex, direccion);
+                Interseccion interseccion = colorEnCamino(i.posicion_mundo.xyz, direccion);
 
                 clip(interseccion.distancia);
+
+                //float profundidad = ReMap(1, _maxPasos, 1, 0, interseccion.cantidadPasos);
 
                 return float4(interseccion.color, 1);
             }

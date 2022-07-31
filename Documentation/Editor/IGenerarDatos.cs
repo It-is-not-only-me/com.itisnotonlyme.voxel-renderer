@@ -2,12 +2,6 @@
 
 namespace ItIsNotOnlyMe.VoxelRenderer
 {
-    public struct Dato
-    {
-        public Vector3 Color;
-        public int Transparente;
-    }
-
     public interface IGenerarDatos
     {
         public Bounds Limites { get; }

@@ -13,8 +13,9 @@ namespace ItIsNotOnlyMe.VoxelRenderer
         [SerializeField] private DatosRender _datosRender;
 
         private GenerarDatos _generarDatos;
+        private ComputeBuffer _datosBuffer;
 
-        private static int _datosStride = 3 * sizeof(float) + sizeof(int);
+        private int _datosStride = 3 * sizeof(float) + sizeof(int);
 
         private void Awake()
         {
@@ -39,7 +40,7 @@ namespace ItIsNotOnlyMe.VoxelRenderer
             Vector3Int datosPorEje = _generarDatos.DatosPorEje;
 
             int cantidadDeDatos = datosPorEje.x * datosPorEje.y * datosPorEje.z;
-            ComputeBuffer datosBuffer = new ComputeBuffer(cantidadDeDatos, _datosStride);
+            _datosBuffer = new ComputeBuffer(cantidadDeDatos, _datosStride);
 
             Dato[,,] datosDados = _generarDatos.Datos();
             Dato[] datosFinales = new Dato[cantidadDeDatos];
@@ -50,11 +51,10 @@ namespace ItIsNotOnlyMe.VoxelRenderer
                     {
                         datosFinales[contador] = datosDados[i, j, k];
                     }
-            datosBuffer.SetData(datosFinales);
 
-            float[] tamanio = new float[3];
-            float[] posicion = new float[3];
+            _datosBuffer.SetData(datosFinales);
 
+            float[] tamanio = new float[3], posicion = new float[3];
             Bounds limites = _generarDatos.Limites;
             for (int i = 0; i < 3; i++)
             {
@@ -62,14 +62,17 @@ namespace ItIsNotOnlyMe.VoxelRenderer
                 posicion[i] = limites.center[i];
             }
 
-            _material.SetBuffer("datos", datosBuffer);
-            _material.SetInt("datosParaEjeX", datosPorEje.x);
-            _material.SetInt("datosParaEjeY", datosPorEje.y);
-            _material.SetInt("datosParaEjeZ", datosPorEje.z);
-            _material.SetFloatArray("tamanio", tamanio);
-            _material.SetFloatArray("posicion", posicion);
+            _material.SetBuffer("_datos", _datosBuffer);
+            _material.SetInt("_datosParaEjeX", datosPorEje.x);
+            _material.SetInt("_datosParaEjeY", datosPorEje.y);
+            _material.SetInt("_datosParaEjeZ", datosPorEje.z);
+            _material.SetFloatArray("_tamanio", tamanio);
+            _material.SetFloatArray("_posicion", posicion);
+        }
 
-            datosBuffer.Dispose();
+        private void OnDestroy()
+        {
+            _datosBuffer.Dispose();
         }
 
         private Mesh GenerarMesh()
