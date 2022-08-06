@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Unlit/RayMarchingShader"
 {
     Properties
@@ -21,6 +19,8 @@ Shader "Unlit/RayMarchingShader"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
+            //#define MAX_LADOS 6
+            #define MAX_HIJOS 27
 
             struct appdata
             {
@@ -45,6 +45,14 @@ Shader "Unlit/RayMarchingShader"
             {
                 float3 color;
                 int transparente;
+
+                int3 tamanioHijos; // cuantos hijos por eje, tiene que ser una grilla regular
+                int posicionesHijos[MAX_HIJOS]; 
+
+                /*int direcciones[MAX_LADOS];
+                
+                int posicionesHijos[MAX_HIJOS];
+                int cantidadHijos;*/
             };
 
             StructuredBuffer<Dato> _datos;
